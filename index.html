@@ -1,1 +1,611 @@
+!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>VC PAY</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f4f6f9;
+      color: #172033;
+    }
+
+    /* LOGIN */
+    #loginPage {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      background: linear-gradient(135deg, #0b2a5b, #162f55);
+    }
+
+    .login-box {
+      background: white;
+      width: 100%;
+      max-width: 420px;
+      padding: 35px 25px;
+      border-radius: 25px;
+      text-align: center;
+    }
+
+    .logo {
+      font-size: 32px;
+      font-weight: bold;
+      color: #173b72;
+      margin-bottom: 10px;
+    }
+
+    .logo span {
+      color: #e31b23;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 15px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      font-size: 16px;
+    }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 15px;
+      width: 100%;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .login-btn {
+      background: #e31b23;
+      color: white;
+      margin-bottom: 20px;
+    }
+
+    .demo {
+      margin-top: 20px;
+      text-align: left;
+      background: #f5f5f5;
+      padding: 15px;
+      border-radius: 12px;
+      color: #555;
+      line-height: 1.6;
+    }
+
+    /* APP */
+    #app {
+      display: none;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #12396f;
+      color: white;
+      padding: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h2 span {
+      color: #ff3038;
+    }
+
+    .logout {
+      width: auto;
+      padding: 10px 15px;
+      background: #e31b23;
+      color: white;
+      font-size: 13px;
+    }
+
+    .container {
+      padding: 18px;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .welcome {
+      margin: 10px 0 20px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 18px;
+      border-radius: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .card h3 {
+      font-size: 13px;
+      color: #777;
+      margin-bottom: 8px;
+    }
+
+    .amount {
+      font-size: 21px;
+      font-weight: bold;
+      color: #12396f;
+    }
+
+    .section {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      margin-bottom: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .section h3 {
+      margin-bottom: 15px;
+      color: #12396f;
+    }
+
+    .primary-btn {
+      background: #12396f;
+      color: white;
+    }
+
+    .payment-btn {
+      background: #e31b23;
+      color: white;
+      margin-top: 10px;
+    }
+
+    .customer {
+      border-bottom: 1px solid #eee;
+      padding: 13px 0;
+    }
+
+    .customer:last-child {
+      border-bottom: none;
+    }
+
+    .customer-name {
+      font-weight: bold;
+    }
+
+    .small {
+      font-size: 13px;
+      color: #777;
+      margin-top: 5px;
+    }
+
+    .success {
+      color: green;
+      margin-top: 10px;
+      font-weight: bold;
+      display: none;
+    }
+
+    @media (min-width: 700px) {
+      .stats {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- LOGIN PAGE -->
+  <div id="loginPage">
+
+    <div class="login-box">
+
+      <div class="logo">
+        VYOMBO <span>COMPLEX</span>
+      </div>
+
+      <h2 style="color:#173b72; margin-bottom:10px;">VC PAY</h2>
+
+      <p class="subtitle">
+        Lipa Kidogo Kidogo • Umiliki Bidhaa
+      </p>
+
+      <input
+        type="text"
+        id="username"
+        placeholder="Username"
+      >
+
+      <input
+        type="password"
+        id="password"
+        placeholder="Password"
+      >
+
+      <button class="login-btn" onclick="login()">
+        INGIA KWENYE MFUMO
+      </button>
+
+      <div class="demo">
+        <strong>Demo accounts:</strong><br>
+        Admin: admin / admin123<br>
+        Cashier: cashier / cash123<br>
+        Sales: sales / sales123
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- MAIN APP -->
+  <div id="app">
+
+    <header>
+      <h2>VC <span>PAY</span></h2>
+
+      <button class="logout" onclick="logout()">
+        Toka
+      </button>
+    </header>
+
+
+    <div class="container">
+
+      <div class="welcome">
+        <h2>Karibu, <span id="userRole"></span> 👋</h2>
+        <p class="small">
+          Mfumo wa malipo ya kidogo kidogo
+        </p>
+      </div>
+
+
+      <!-- STATISTICS -->
+      <div class="stats">
+
+        <div class="card">
+          <h3>WATEJA</h3>
+          <div class="amount">0</div>
+        </div>
+
+        <div class="card">
+          <h3>MADENI</h3>
+          <div class="amount">TSh 0</div>
+        </div>
+
+        <div class="card">
+          <h3>MALIPO LEO</h3>
+          <div class="amount">TSh 0</div>
+        </div>
+
+        <div class="card">
+          <h3>BIDHAA</h3>
+          <div class="amount">0</div>
+        </div>
+
+      </div>
+
+
+      <!-- ADD CUSTOMER -->
+      <div class="section">
+
+        <h3>➕ Sajili Mteja</h3>
+
+        <input
+          type="text"
+          id="customerName"
+          placeholder="Jina la mteja"
+        >
+
+        <input
+          type="tel"
+          id="customerPhone"
+          placeholder="Namba ya simu"
+        >
+
+        <input
+          type="text"
+          id="customerId"
+          placeholder="Namba ya Kitambulisho"
+        >
+
+        <button class="primary-btn" onclick="addCustomer()">
+          HIFADHI MTEJA
+        </button>
+
+        <div id="customerSuccess" class="success">
+          ✓ Mteja ameongezwa!
+        </div>
+
+      </div>
+
+
+      <!-- PAYMENT -->
+      <div class="section">
+
+        <h3>💰 Rekodi Malipo</h3>
+
+        <input
+          type="text"
+          id="paymentCustomer"
+          placeholder="Jina la mteja"
+        >
+
+        <input
+          type="number"
+          id="paymentAmount"
+          placeholder="Kiasi cha malipo (TSh)"
+        >
+
+        <select id="paymentMethod">
+          <option value="">Chagua njia ya malipo</option>
+          <option>Cash</option>
+          <option>M-Pesa</option>
+          <option>Tigo Pesa</option>
+          <option>Airtel Money</option>
+          <option>Bank</option>
+        </select>
+
+        <button class="payment-btn" onclick="makePayment()">
+          REKODI MALIPO
+        </button>
+
+        <div id="paymentSuccess" class="success">
+          ✓ Malipo yamerekodiwa!
+        </div>
+
+      </div>
+
+
+      <!-- CUSTOMERS -->
+      <div class="section">
+
+        <h3>👥 Wateja</h3>
+
+        <div id="customerList">
+          <p class="small">
+            Bado hakuna wateja waliosajiliwa.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL = "https://gdwtfqzvdoguottmfclk.supabase.co";
+const SUPABASE_KEY = "sb_publishable_5Job193meb6xEUw3L9KhQA_LuslMZri"; 
+
+let supabase = null;
+if (window.supabase) {
+  supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+}
+
+  let customers = [];
+
+  function login() {
+  alert("LOGIN IMEFIKA");
+
+    const username =
+      document.getElementById("username").value.trim();
+
+    const password =
+      document.getElementById("password").value.trim();
+
+    let role = "";
+
+    if (username === "admin" && password === "admin123") {
+      role = "ADMIN";
+    }
+
+    else if (username === "cashier" && password === "cash123") {
+      role = "CASHIER";
+    }
+
+    else if (username === "sales" && password === "sales123") {
+      role = "SALES";
+    }
+
+    else {
+      alert("Username au password sio sahihi!");
+      return;
+    }
+
+    document.getElementById("loginPage").style.display = "none";
+
+    document.getElementById("app").style.display = "block";
+
+    document.getElementById("userRole").innerText = role;
+
+    localStorage.setItem("vcPayUser", role);
+
+  }
+
+
+  function logout() {
+
+    localStorage.removeItem("vcPayUser");
+
+    document.getElementById("app").style.display = "none";
+
+    document.getElementById("loginPage").style.display = "flex";
+
+  }
+
+
+  async function addCustomer() {
+
+    const name =
+      document.getElementById("customerName").value.trim();
+
+    const phone =
+      document.getElementById("customerPhone").value.trim();
+
+    const id =
+      document.getElementById("customerId").value.trim();
+
+    if (!name || !phone || !id) {
+
+      alert("Tafadhali jaza taarifa zote!");
+
+      return;
+    }
+const { data, error } = await supabase
+  .from("customers")
+  .insert([
+    {
+      name: name,
+      phone: phone,
+      customer_id: id
+    }
+  ]);
+
+if (error) {
+  alert("Imeshindikana kuhifadhi customer: " + error.message);
+  return;
+}
+
+customers.push({
+  name: name,
+  phone: phone,
+  id: id
+});
+
+displayCustomers();
+
+    document.getElementById("customerName").value = "";
+    document.getElementById("customerPhone").value = "";
+    document.getElementById("customerId").value = "";
+
+    document.getElementById("customerSuccess").style.display = "block";
+
+    setTimeout(() => {
+      document.getElementById("customerSuccess").style.display = "none";
+    }, 3000);
+
+  }
+
+
+  function displayCustomers() {
+
+    const list =
+      document.getElementById("customerList");
+
+    list.innerHTML = "";
+
+    customers.forEach((customer, index) => {
+
+      list.innerHTML += `
+        <div class="customer">
+
+          <div class="customer-name">
+            ${index + 1}. ${customer.name}
+          </div>
+
+          <div class="small">
+            📞 ${customer.phone}
+          </div>
+
+          <div class="small">
+            🪪 ID: ${customer.id}
+          </div>
+
+        </div>
+      `;
+
+    });
+
+  }
+async function loadCustomers() {
+
+    const { data, error } = await supabase
+        .from("customers")
+        .select("*");
+
+    if (error) {
+        console.error("Imeshindikana kupakia customers:", error);
+        return;
+    }
+
+    customers = data || [];
+
+    displayCustomers();
+}
+
+  function makePayment() {
+
+    const customer =
+      document.getElementById("paymentCustomer").value.trim();
+
+    const amount =
+      document.getElementById("paymentAmount").value.trim();
+
+    const method =
+      document.getElementById("paymentMethod").value;
+
+    if (!customer || !amount || !method) {
+
+      alert("Tafadhali jaza taarifa zote za malipo!");
+
+      return;
+    }
+
+    document.getElementById("paymentSuccess").style.display = "block";
+
+    document.getElementById("paymentCustomer").value = "";
+    document.getElementById("paymentAmount").value = "";
+    document.getElementById("paymentMethod").value = "";
+
+    setTimeout(() => {
+
+      document.getElementById("paymentSuccess").style.display = "none";
+
+    }, 3000);
+
+  }
+
+
+  window.onload = function() {
+
+    const savedUser =
+      localStorage.getItem("vcPayUser");
+
+    if (savedUser) {
+
+      document.getElementById("loginPage").style.display = "none";
+
+      document.getElementById("app").style.display = "block";
+
+      document.getElementById("userRole").innerText =
+        savedUser;
+
+    }
+
+  };
+
+</script>
+
+</body>
+</html>
